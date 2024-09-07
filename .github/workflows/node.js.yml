@@ -30,4 +30,16 @@ jobs:
         AWS_REGION: ap-south-1
 
     - run: npm run build --if-present
-    - run: pm2 restart app.js 
+
+    # Restart PM2 and pass environment variables explicitly
+    - name: Restart app using PM2
+      run: |
+        pm2 stop app.js || true  # Ensure the app is stopped before restarting
+        pm2 start app.js --update-env
+      env:
+        MONGO_URI: mongodb+srv://blockchainxyz191:ApYbzc06p49OAUpv@bubblebitx.0rlur.mongodb.net/bubblebitx?retryWrites=true&w=majority
+        PORT: 8080
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_S3_BUCKET: aws-sample-bucket9351
+        AWS_REGION: ap-south-1
